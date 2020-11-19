@@ -6,27 +6,57 @@ public class Documents extends Thread{
         name=s;
         System.out.println("Am ajuns la documentul "+name);
     }
-    public void run(){
-        System.out.println("Procesz documentul"+name);
+    public void run()
+    {
+        System.out.println("Procesz documentul "+name);
         if(name.equals("A")){
-            while(!Constants.isReadyB ){
-                System.out.println("A-Astept obtinere documente b");
+            sleepp();
+            if(!Constants.isReadyB)
+            {
+                Constants.esuatB=true;
+                return;
             }
-            while(!Constants.isReadyC){
-                System.out.println("A-Astept obtinere documente C");
+            if(!Constants.isReadyC)
+            {
+                Constants.esuatC=true;
+                return;
             }
             System.out.println("A a fost obtinut");
         }
-        if(name.equals("B")){
-            while(!Constants.isReadyC){
-                System.out.println("Se asteapta dupa documentul C");
+        if(name.equals("B"))
+        {
+            sleepp();
+            if(Constants.esuatB)
+            {
+                System.out.println("Documentul B a esuat");
+                return;
             }
-            Constants.isReadyB=true;
-            System.out.println("B a fost obtinut");
+            if(Constants.isReadyC)
+            {
+                Constants.isReadyB=true;
+                System.out.println("B a fost obtinut");
+            }
         }
-        if(name.equals("C")){
+        if(name.equals("C"))
+        {
+            sleepp();
+            if(Constants.esuatC)
+            {
+                System.out.println("Documentul C a esuat");
+                return;
+            }
             Constants.isReadyC=true;
-            System.out.println("Documentul C a fost obtinut");
+            System.out.println("C-Documentul C a fost obtinut");
+        }
+    }
+    void sleepp()
+    {
+        try
+        {
+            sleep((long) (Math.random()*1000));
+        } catch (InterruptedException e)
+        {
+            e.printStackTrace();
         }
     }
 }
